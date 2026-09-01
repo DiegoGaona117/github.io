@@ -283,6 +283,26 @@
             max-width: 520px;
         }
 
+        /* ── STATS RÁPIDAS (visibles para todos, no es precio) ── */
+        .hero-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .hero-stat {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text);
+            background: var(--surface2);
+            border: 1px solid var(--border2);
+            padding: 7px 12px;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            white-space: nowrap;
+        }
+
         /* ── OFERTA HERO (solo visitantes sin sesión) ── */
         .hero-oferta {
             margin-top: 24px;
@@ -821,6 +841,15 @@
     <h1>Aprende SolidWorks con <span>Diego Gaona</span></h1>
     <p>Módulos diseñados paso a paso para llevarte de cero hasta la certificación CSWA.</p>
 
+    <!-- Stats rápidas: visibles siempre (logueado o no), no revelan precio -->
+    <div class="hero-stats">
+        <span class="hero-stat">232+ lecciones</span>
+        <span class="hero-stat">3 exámenes CSWA</span>
+        <span class="hero-stat">+200 planos PDF</span>
+        <span class="hero-stat">2 proyectos completos</span>
+        <span class="hero-stat">+19,000 alumnos</span>
+    </div>
+
     <div class="hero-oferta" id="hero-oferta">
         <span class="oferta-badge">Acceso completo</span>
         <div class="oferta-precio">
@@ -828,8 +857,9 @@
             <span class="oferta-nota">pago único · acceso de por vida</span>
         </div>
         <ul class="oferta-lista">
-            <li>Los 4 módulos completos: Pieza, Planos, Ensambles y Simulador de práctica para el examen CSWA</li>
-            <li>Bonus: paquete de +200 planos PDF para practicar</li>
+            <li>232+ lecciones en video y PDF: modelado 3D, planos técnicos y ensambles, de cero a avanzado</li>
+            <li>Simulador de examen CSWA: 3 exámenes, 36 preguntas en condición real</li>
+            <li>Bonus: +200 planos PDF de práctica + 2 proyectos completos (brazo robótico y bote de basura)</li>
             <li>Acompañamiento por WhatsApp incluido en tu pago único, desde que empiezas hasta que terminas el curso</li>
         </ul>
         <a class="oferta-cta" href="https://wa.me/5214621579719?text=Hola%20Diego%2C%20quiero%20obtener%20el%20acceso%20completo%20a%20los%20cursos%20por%20%241499" target="_blank" rel="noopener">
@@ -877,7 +907,7 @@
             <div class="card-title">Domina el Modelado 3D desde Cero</div>
             <div class="card-desc">Empiezas aquí, desde cero. Sé que la pantalla de SolidWorks puede intimidar al inicio — le pasa a casi todos mis alumnos. Por eso vamos paso a paso, con ejercicios reales y planos técnicos, hasta que diseñar una pieza deje de sentirse complicado.</div>
             <div class="card-features">
-                <span class="feat">+170 lecciones</span>
+                <span class="feat">126 lecciones</span>
                 <span class="feat">17 prácticas</span>
                 <span class="feat">Planos PDF</span>
             </div>
@@ -919,7 +949,7 @@
             <div class="card-title">Experto en Ensambles y Mecanismos</div>
             <div class="card-desc">Ya no trabajas una pieza sola — ahora las haces funcionar juntas. Esta etapa es donde más alumnos se traban, porque hay más piezas moviéndose a la vez. Vamos a resolverlo con calma: uniones, movimiento real, mecanismos completos.</div>
             <div class="card-features">
-                <span class="feat">41 lecciones</span>
+                <span class="feat">39 lecciones</span>
                 <span class="feat">Animaciones</span>
                 <span class="feat">Mecanismos</span>
             </div>
@@ -991,7 +1021,7 @@
             <div class="card-desc">Cuando ya tienes los 4 módulos encima, lo que más fija el aprendizaje es un proyecto real de principio a fin. Aquí armamos juntos un brazo robótico completo, pieza por pieza, hasta verlo funcionar como un mecanismo articulado.</div>
             <div class="card-features">
                 <span class="feat">Proyecto completo</span>
-                <span class="feat">13 lecciones</span>
+                <span class="feat">16 lecciones</span>
                 <span class="feat">Mecanismo articulado</span>
             </div>
         </div>
@@ -1012,7 +1042,7 @@
         <div class="card-desc">Este proyecto te lleva del inicio al final: primero modelas cada pieza por separado, y después las ensamblas hasta tener el mecanismo completo funcionando — la tapa, el pedal, todo moviéndose como en la vida real. Es la mejor forma de ver cómo se conecta todo lo que ya aprendiste.</div>
         <div class="card-features">
             <span class="feat">Proyecto completo</span>
-            <span class="feat">Piezas + ensamblaje</span>
+            <span class="feat">6 lecciones</span>
             <span class="feat">Mecanismo funcional</span>
         </div>
     </div>
