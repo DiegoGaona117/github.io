@@ -1,1280 +1,676 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <meta name="color-scheme" content="dark light">
-
-    <!-- SEO -->
-    <title>Mis Cursos — Diego Gaona | SolidWorks</title>
-    <meta name="description" content="Aprende SolidWorks con Diego Gaona. Módulos de modelado 3D, planos técnicos, ensambles y simulador CSWA para obtener tu certificación.">
-
-    <!-- Facebook App -->
-    <meta property="fb:app_id" content="392241650294847" />
-    <meta property="fb:admins" content="100003831708496" />
-
-    <!-- Open Graph -->
-    <meta property="og:title" content="Cursos de SolidWorks — Diego Gaona">
-    <meta property="og:description" content="Módulos diseñados paso a paso para llevarte de cero hasta la certificación CSWA.">
-    <meta property="og:image" content="https://static.wixstatic.com/media/32c95b_e647ee92174f4a34bc8dad8ac4bb3946~mv2.webp">
-    <meta property="og:url" content="https://app.cursodiegogaona.com/">
-    <meta property="og:type" content="website">
-
-    <!-- Favicon -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%233b82f6'/><text y='72' x='50' text-anchor='middle' font-size='62' font-family='sans-serif' font-weight='bold' fill='white'>3D</text></svg>">
-
-    <!-- Preconnect -->
-    <link rel="preconnect" href="https://static.wixstatic.com">
-    <link rel="preconnect" href="https://connect.facebook.net">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-
-    <!-- Facebook Pixel -->
-    <script>
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '373277814132384');
-    fbq('track', 'PageView');
-    </script>
-    <noscript><img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id=373277814132384&ev=PageView&noscript=1"/></noscript>
-    <!-- End Facebook Pixel -->
-
-    <style>
-        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-        :root {
-            --bg:       #0b0d12;
-            --surface:  #12151c;
-            --surface2: #1a1e2a;
-            --border:   #ffffff10;
-            --border2:  #ffffff20;
-            --accent:   #3b82f6;
-            --orange:   #f97316;
-            --gold:     #eab308;
-            --text:     #e8eaf0;
-            --dim:      #9ca3af;
-            --green:    #10b981;
-            --shadow:   rgba(0,0,0,0.5);
-            --surface-gold:   #14140f;
-            --surface-orange: #16110c;
-            color-scheme: dark;
-        }
-
-        /* ── TEMA CLARO — se activa solo si el sistema/navegador del usuario lo tiene así ── */
-        @media (prefers-color-scheme: light) {
-            :root {
-                --bg:       #f6f7f9;
-                --surface:  #ffffff;
-                --surface2: #eef1f5;
-                --border:   #00000014;
-                --border2:  #00000026;
-                --text:     #12151c;
-                --dim:      #5b6472;
-                --shadow:   rgba(0,0,0,0.12);
-                --surface-gold:   #fffaf0;
-                --surface-orange: #fff4ec;
-                color-scheme: light;
-            }
-        }
-
-        html { scroll-behavior: smooth; }
-
-        body {
-            font-family: 'Sora', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            overflow-x: hidden;
-            width: 100%;
-        }
-
-        img { max-width: 100%; display: block; }
-
-        /* ── HEADER ── */
-        header {
-            background: var(--surface);
-            border-bottom: 1px solid var(--border);
-            padding: 0 24px;
-            min-height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .logo {
-            font-size: 15px;
-            font-weight: 700;
-            letter-spacing: -0.03em;
-            color: var(--text);
-            white-space: nowrap;
-        }
-
-        .logo span { color: var(--orange); }
-
-        /* ── BOTÓN ACCESO DIRECTO ── */
-        .btn-acceso {
-            height: 34px;
-            padding: 0 16px;
-            border-radius: 99px;
-            border: none;
-            background: #facc15;
-            color: black;
-            font-family: 'Sora', sans-serif;
-            font-size: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            white-space: nowrap;
-            box-shadow: 0 0 0 0 #f9731660;
-            animation: pulso 2s infinite;
-            transition: transform 0.2s;
-            flex-shrink: 0;
-        }
-
-        .btn-acceso:hover {
-            transform: scale(1.05);
-            animation: none;
-            box-shadow: 0 4px 20px #f9731650;
-        }
-
-        @keyframes pulso {
-            0%   { box-shadow: 0 0 0 0 #f9731660; }
-            70%  { box-shadow: 0 0 0 10px #f9731600; }
-            100% { box-shadow: 0 0 0 0 #f9731600; }
-        }
-
-        /* ── BOTÓN SESIÓN ── */
-        .btn-sesion {
-            height: 34px;
-            padding: 0 16px;
-            border-radius: 99px;
-            border: 1px solid var(--border2);
-            background: transparent;
-            color: var(--text);
-            font-family: 'Sora', sans-serif;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.2s;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .btn-sesion:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-        }
-
-        .btn-sesion.activa {
-            border-color: #10b98150;
-            color: var(--green);
-        }
-
-        .btn-sesion.activa:hover {
-            border-color: var(--green);
-            background: #10b98115;
-        }
-
-        /* ── TOOLTIP DESCARGA ── */
-        .tip-descarga {
-            display: none;
-            position: fixed;
-            top: 70px;
-            right: 20px;
-            background: var(--surface2);
-            border: 1px solid #f9731640;
-            border-radius: 12px;
-            padding: 16px 20px;
-            font-size: 13px;
-            color: var(--text);
-            z-index: 999;
-            box-shadow: 0 8px 32px var(--shadow);
-            max-width: 280px;
-            line-height: 1.6;
-            animation: slideIn 0.25s ease;
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(-8px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-
-        .tip-descarga p {
-            margin-top: 8px;
-            color: var(--dim);
-            font-size: 13px;
-        }
-
-        .tip-descarga .btn-entendido {
-            margin-top: 12px;
-            display: block;
-            width: 100%;
-            background: #facc15;
-            border: none;
-            color: black;
-            padding: 8px 0;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 700;
-            font-family: 'Sora', sans-serif;
-            transition: opacity 0.2s;
-        }
-
-        .tip-descarga .btn-entendido:hover { opacity: 0.85; }
-
-        /* ── HERO ── */
-        .hero {
-            padding: 56px 24px 40px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .hero-label {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--orange);
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            margin-bottom: 16px;
-        }
-
-        .hero-label::before {
-            content: '';
-            width: 20px;
-            height: 2px;
-            background: var(--orange);
-            border-radius: 2px;
-            flex-shrink: 0;
-        }
-
-        .hero h1 {
-            font-size: clamp(26px, 6vw, 44px);
-            font-weight: 700;
-            letter-spacing: -0.04em;
-            line-height: 1.15;
-            margin-bottom: 14px;
-        }
-
-        .hero h1 span { color: var(--accent); }
-
-        .hero p {
-            font-size: 15px;
-            color: var(--dim);
-            line-height: 1.7;
-            max-width: 520px;
-        }
-
-        /* ── STATS RÁPIDAS (visibles para todos, no es precio) ── */
-        .hero-stats {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .hero-stat {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text);
-            background: var(--surface2);
-            border: 1px solid var(--border2);
-            padding: 7px 12px;
-            border-radius: 8px;
-            font-family: 'JetBrains Mono', monospace;
-            white-space: nowrap;
-        }
-
-        /* ── OFERTA HERO (solo visitantes sin sesión) ── */
-        .hero-oferta {
-            margin-top: 24px;
-            max-width: 560px;
-            background: var(--surface);
-            border: 1px solid #f9731635;
-            border-radius: 14px;
-            padding: 22px 24px;
-        }
-
-        .oferta-badge {
-            display: inline-block;
-            font-size: 10px;
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            color: #fff;
-            background: var(--orange);
-            padding: 4px 10px;
-            border-radius: 99px;
-            font-family: 'JetBrains Mono', monospace;
-            margin-bottom: 14px;
-        }
-
-        .oferta-precio {
-            display: flex;
-            align-items: baseline;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 14px;
-        }
-
-        .oferta-monto {
-            font-size: 30px;
-            font-weight: 700;
-            letter-spacing: -0.03em;
-            color: var(--text);
-        }
-
-        .oferta-nota {
-            font-size: 12.5px;
-            color: var(--dim);
-        }
-
-        .oferta-lista {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-bottom: 20px;
-        }
-
-        .oferta-lista li {
-            font-size: 13.5px;
-            color: var(--dim);
-            line-height: 1.5;
-            padding-left: 22px;
-            position: relative;
-        }
-
-        .oferta-lista li::before {
-            content: '✓';
-            position: absolute;
-            left: 0;
-            color: var(--orange);
-            font-weight: 700;
-        }
-
-        .oferta-cta {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            height: 42px;
-            padding: 0 22px;
-            border-radius: 10px;
-            background: var(--orange);
-            color: #fff;
-            font-family: 'Sora', sans-serif;
-            font-size: 14px;
-            font-weight: 700;
-            text-decoration: none;
-            transition: background 0.15s, transform 0.15s;
-        }
-
-        .oferta-cta:hover {
-            background: #ea6a0a;
-            transform: translateY(-1px);
-        }
-
-        /* ── RUTA ── */
-        .ruta {
-            max-width: 1100px;
-            margin: 0 auto 16px;
-            padding: 0 24px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 12px;
-            color: var(--dim);
-            font-family: 'JetBrains Mono', monospace;
-            overflow-x: auto;
-            white-space: nowrap;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-        }
-
-        .ruta::-webkit-scrollbar { display: none; }
-
-        .ruta-step {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-shrink: 0;
-        }
-
-        .ruta-num {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: var(--accent);
-            color: #fff;
-            font-size: 10px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .ruta-arrow { color: var(--border2); font-size: 14px; flex-shrink: 0; }
-
-        /* ── SECTION LABEL (para Bonus) ── */
-        .section-label {
-            max-width: 1200px;
-            margin: 8px auto 20px;
-            padding: 0 24px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--gold);
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-        }
-
-        .section-label::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: linear-gradient(90deg, #eab30840, transparent);
-        }
-
-        /* ── GRID ── */
-        .grid {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 24px 40px;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-        }
-
-        .grid-bonus {
-            padding-bottom: 80px;
-        }
-
-        /* ── CARD ── */
-        .card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            overflow: hidden;
-            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-            cursor: pointer;
-            text-decoration: none;
-            display: flex;
-            flex-direction: column;
-            min-width: 0;
-        }
-
-        .card:hover {
-            transform: translateY(-4px);
-            border-color: var(--border2);
-            box-shadow: 0 20px 40px var(--shadow);
-        }
-
-        .card-img {
-            width: 100%;
-            aspect-ratio: 16/9;
-            object-fit: cover;
-            display: block;
-            transition: transform 0.4s ease;
-        }
-
-        .card:hover .card-img { transform: scale(1.04); }
-
-        .card-img-wrap {
-            overflow: hidden;
-            position: relative;
-        }
-
-        .card-badge {
-            position: absolute;
-            top: 12px;
-            left: 12px;
-            font-size: 10px;
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            padding: 4px 10px;
-            border-radius: 99px;
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        .card-badge { box-shadow: 0 2px 8px var(--shadow); }
-
-        .badge-blue   { background: #3b82f6; color: #ffffff; border: 1px solid #ffffff30; }
-        .badge-orange { background: #f97316; color: #ffffff; border: 1px solid #ffffff30; }
-        .badge-green  { background: #10b981; color: #ffffff; border: 1px solid #ffffff30; }
-        .badge-purple { background: #8b5cf6; color: #ffffff; border: 1px solid #ffffff30; }
-        .badge-gold   { background: #eab308; color: #1a1400; border: 1px solid #ffffff30; }
-
-        .card-body {
-            padding: 20px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            min-width: 0;
-        }
-
-        .card-num {
-            font-size: 10px;
-            font-weight: 600;
-            color: var(--dim);
-            font-family: 'JetBrains Mono', monospace;
-            letter-spacing: 0.1em;
-        }
-
-        .card-title {
-            font-size: 17px;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            color: var(--text);
-            line-height: 1.3;
-        }
-
-        .card-desc {
-            font-size: 13px;
-            color: var(--dim);
-            line-height: 1.65;
-            flex: 1;
-        }
-
-        .card-footer {
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            padding: 14px 20px;
-            border-top: 1px solid var(--border);
-            margin-top: auto;
-        }
-
-        .btn-card {
-            height: 32px;
-            padding: 0 16px;
-            border-radius: 8px;
-            border: none;
-            font-family: 'Sora', sans-serif;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.15s;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .btn-primary { background: var(--accent); color: #fff; }
-        .btn-primary:hover { background: #2563eb; }
-        .btn-orange  { background: var(--orange); color: #fff; }
-        .btn-orange:hover { background: #ea6a0a; }
-        .btn-green   { background: var(--green); color: #fff; }
-        .btn-green:hover { background: #059669; }
-        .btn-purple  { background: #7c3aed; color: #fff; }
-        .btn-purple:hover { background: #6d28d9; }
-        .btn-gold    { background: var(--gold); color: #1a1400; }
-        .btn-gold:hover { background: #ca8a04; }
-
-        /* ── AUTHOR ── */
-        .author {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 2px;
-        }
-
-        .author-avatar {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background: var(--accent);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 11px;
-            font-weight: 700;
-            color: #fff;
-            flex-shrink: 0;
-        }
-
-        .author-name {
-            font-size: 12px;
-            color: var(--dim);
-        }
-
-        /* ── FEATURES ── */
-        .card-features {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-
-        .feat {
-            font-size: 10px;
-            padding: 3px 8px;
-            border-radius: 4px;
-            background: var(--surface2);
-            border: 1px solid var(--border2);
-            color: var(--dim);
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        /* ── CARD META (Paso 4, destacada, ocupa todo el ancho) ── */
-        .card-meta {
-            grid-column: 1 / -1;
-            display: grid;
-            grid-template-columns: minmax(220px, 380px) 1fr;
-            border: 1px solid #f9731635;
-            background: var(--surface-orange);
-        }
-
-        .card-meta:hover {
-            border-color: #f9731660;
-            box-shadow: 0 20px 45px var(--shadow);
-        }
-
-        .card-meta .card-img-wrap {
-            aspect-ratio: auto;
-            height: 100%;
-        }
-
-        .card-meta .card-img {
-            height: 100%;
-            aspect-ratio: auto;
-            object-fit: cover;
-        }
-
-        .card-meta .card-body {
-            padding: 24px 28px;
-            justify-content: center;
-        }
-
-        .card-meta .card-title {
-            font-size: 20px;
-        }
-
-        .card-meta .card-footer {
-            padding: 18px 28px;
-        }
-
-        /* ── BONUS CARD (destacada, ocupa todo el ancho) ── */
-        .card-bonus {
-            grid-column: 1 / -1;
-            display: grid;
-            grid-template-columns: minmax(220px, 380px) 1fr;
-            border: 1px solid #eab30835;
-            background: var(--surface-gold);
-        }
-
-        .card-bonus:hover {
-            border-color: #eab30860;
-            box-shadow: 0 20px 45px var(--shadow);
-        }
-
-        .card-bonus .card-img-wrap {
-            aspect-ratio: auto;
-            height: 100%;
-        }
-
-        .card-bonus .card-img {
-            height: 100%;
-            aspect-ratio: auto;
-            object-fit: cover;
-        }
-
-        .card-bonus .card-body {
-            padding: 24px 28px;
-            justify-content: center;
-        }
-
-        .card-bonus .card-title {
-            font-size: 20px;
-        }
-
-        .card-bonus .card-footer {
-            padding: 18px 28px;
-        }
-
-        /* ── FOOTER ── */
-        footer {
-            border-top: 1px solid var(--border);
-            padding: 24px;
-            text-align: center;
-            font-size: 12px;
-            color: var(--dim);
-        }
-
-        footer a { color: var(--orange); text-decoration: none; }
-
-        /* ── ANIMACIÓN ENTRADA ── */
-        .card {
-            opacity: 0;
-            transform: translateY(24px);
-            animation: fadeUp 0.5s ease forwards;
-        }
-
-        .card:nth-child(1) { animation-delay: 0.05s; }
-        .card:nth-child(2) { animation-delay: 0.15s; }
-        .card:nth-child(3) { animation-delay: 0.25s; }
-        .card:nth-child(4) { animation-delay: 0.35s; }
-
-        @keyframes fadeUp {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* ══════════════════ MOBILE — 100% ADAPTADO ══════════════════ */
-        @media (max-width: 720px) {
-            .grid { grid-template-columns: 1fr; }
-            .card-bonus,
-            .card-meta {
-                grid-template-columns: 1fr;
-            }
-            .card-bonus .card-img-wrap,
-            .card-meta .card-img-wrap { aspect-ratio: 16/9; height: auto; }
-            .card-bonus .card-img,
-            .card-meta .card-img { aspect-ratio: 16/9; height: auto; }
-        }
-
-        @media (max-width: 600px) {
-            header { padding: 0 16px; min-height: 56px; }
-            .logo { font-size: 14px; }
-            .btn-acceso { font-size: 12px; padding: 0 12px; height: 32px; display: none; }
-            .btn-sesion { font-size: 11px; padding: 0 12px; height: 32px; }
-
-            .hero { padding: 32px 16px 24px; }
-            .hero p { font-size: 14px; }
-            .hero-oferta { padding: 18px 16px; margin-top: 20px; }
-            .oferta-monto { font-size: 26px; }
-
-            .ruta { padding: 0 16px; font-size: 11px; }
-
-            .section-label { padding: 0 16px; }
-
-            .grid { padding: 0 16px 32px; gap: 16px; }
-            .grid-bonus { padding-bottom: 56px; }
-
-            .card-body { padding: 16px; }
-            .card-title { font-size: 16px; }
-            .card-desc { font-size: 12.5px; }
-            .card-footer { padding: 12px 16px; }
-
-            .card-bonus .card-body,
-            .card-meta .card-body { padding: 18px 16px; }
-            .card-bonus .card-title,
-            .card-meta .card-title { font-size: 18px; }
-            .card-bonus .card-footer,
-            .card-meta .card-footer { padding: 14px 16px; }
-
-            .tip-descarga { right: 10px; left: 10px; max-width: none; top: 64px; }
-        }
-
-        @media (max-width: 801px) {
-    .btn-acceso { display: none; }
-}
-
-        @media (max-width: 380px) {
-            .btn-acceso span.btn-text-full { display: none; }
-            .btn-sesion span.btn-text-full { display: none; }
-            .card-title { font-size: 15px; }
-        }
-
-        /* Evita zoom raro y respeta áreas seguras en iOS */
-        @supports (padding: max(0px)) {
-            header {
-                padding-left: max(24px, env(safe-area-inset-left));
-                padding-right: max(24px, env(safe-area-inset-right));
-            }
-            @media (max-width: 600px) {
-                header {
-                    padding-left: max(16px, env(safe-area-inset-left));
-                    padding-right: max(16px, env(safe-area-inset-right));
-                }
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- SEO -->
+  <title>Curso de Solidworks desde cero hasta Certificación CSWA — Curso Diego Gaona</title>
+  <meta name="description" content="Aprende SolidWorks desde cero con el Módulo de Pieza. Videos paso a paso, ejercicios prácticos y planos técnicos para dominar el diseño 3D.">
+
+  <!-- Facebook App -->
+  <meta property="fb:app_id" content="392241650294847" />
+  <meta property="fb:admins" content="100003831708496" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Curso de SolidWorks desde cero a certificación CSWA — Curso Diego Gaona">
+  <meta property="og:description" content="Aprende SolidWorks con práctica real. Videos explicativos y ejercicios paso a paso para dominar el diseño 3D.">
+  <meta property="og:image" content="https://static.wixstatic.com/media/32c95b_e647ee92174f4a34bc8dad8ac4bb3946~mv2.webp">
+  <meta property="og:url" content="https://cursodiegogaona.com">
+  <meta property="og:type" content="website">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%233b82f6'/><text y='72' x='50' text-anchor='middle' font-size='62' font-family='sans-serif' font-weight='bold' fill='white'>3D</text></svg>">
+
+  <!-- Preconnect -->
+  <link rel="preconnect" href="https://static.wixstatic.com">
+  <link rel="preconnect" href="https://www.youtube.com">
+  <link rel="preconnect" href="https://connect.facebook.net">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://get.geojs.io">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Tabler Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+
+  <!-- Facebook Pixel -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '373277814132384');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=373277814132384&ev=PageView&noscript=1"
+  /></noscript>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RN68VLQLTW"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-RN68VLQLTW');
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #f4f4f2;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      color: #1a1a18;
+    }
+    .card {
+      background: #ffffff;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 14px;
+      padding: 2.5rem 2rem;
+      width: 100%;
+      max-width: 380px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 2rem;
+    }
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: #e6f1fb;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: #185fa5;
+    }
+    .logo-text { font-size: 16px; font-weight: 600; color: #1a1a18; }
+    h1 { font-size: 22px; font-weight: 600; color: #1a1a18; margin-bottom: 0.35rem; }
+    .subtitle { font-size: 15px; color: #2a2a26; margin-bottom: 1.75rem; }
+    .field { margin-bottom: 1rem; }
+    label { display: block; font-size: 15px; color: #1f1e1b; margin-bottom: 6px; }
+    input[type="text"] {
+      width: 100%;
+      height: 42px;
+      border: 1px solid #d3d1c7;
+      border-radius: 8px;
+      background: #ffffff;
+      color: #1a1a18;
+      font-size: 16px;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      padding: 0 12px;
+    }
+    input#codeInput {
+      text-align: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 22px;
+      letter-spacing: 3px;
+    }
+    input:focus {
+      border-color: #378add;
+      box-shadow: 0 0 0 3px rgba(55,138,221,0.12);
+    }
+    .btn-login {
+      width: 100%;
+      height: 44px;
+      background: #1a1a18;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 0.5rem;
+    }
+    .btn-login:hover:not(:disabled) { opacity: 0.85; }
+    .btn-login:active:not(:disabled) { transform: scale(0.98); }
+    .btn-login:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn-secondary {
+      width: 100%;
+      background: transparent;
+      color: #1f1e1b;
+      border: none;
+      font-size: 14px;
+      cursor: pointer;
+      margin-top: 0.85rem;
+      text-decoration: underline;
+    }
+    .btn-secondary:disabled { opacity: 0.5; cursor: not-allowed; text-decoration: none; }
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .msg {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      border-radius: 8px;
+      padding: 8px 12px;
+      margin-bottom: 1rem;
+    }
+    .msg.error   { color: #a32d2d; background: #fcebeb; border: 1px solid #f09595; }
+    .msg.success { color: #3b6d11; background: #eaf3de; border: 1px solid #97c459; }
+    .msg.info    { color: #185fa5; background: #e6f1fb; border: 1px solid #93c1e8; }
+    .msg.show    { display: flex; }
+    .divider { border: none; border-top: 1px solid #e8e6df; margin: 1.5rem 0 1rem; }
+    .help { font-size: 14px; color: #2a2a26; text-align: center; line-height: 1.6; }
+    .hidden { display: none; }
+  </style>
 </head>
 <body>
 
-<!-- HEADER -->
-<header>
-    <div class="logo">Diego <span>Gaona</span></div>
-    <div style="display:flex; align-items:center; gap:10px;">
-        <button class="btn-sesion" id="btn-sesion" onclick="clicBotonSesion()">
-            <span id="btn-sesion-texto">Cargando…</span>
-        </button>
-        <button class="btn-acceso" onclick="descargarAcceso()">⬇️ <span class="btn-text-full">Descarga tu acceso directo</span></button>
-    </div>
-</header>
+  <div class="card" id="loginCard">
 
-<!-- TOOLTIP DESCARGA -->
-<div class="tip-descarga" id="tip-descarga">
-    ✅ <strong>¡Descarga iniciada!</strong>
-    <p>
-        Guarda el archivo en tu <strong style="color:#f97316;">Escritorio</strong>
-        para que nunca pierdas el acceso a tus cursos.
-        Solo dale doble clic cuando quieras entrar.
-    </p>
-    <button class="btn-entendido" onclick="cerrarTip()">¡Entendido! 👍</button>
-</div>
+    <!-- ── VISTA 1: Login (correo) ── -->
+    <div id="viewLogin">
+      <div class="logo">
+        <div class="logo-icon"><i class="ti ti-box"></i></div>
+        <span class="logo-text">Diego Gaona · Cursos</span>
+      </div>
+      <h1>Iniciar sesión</h1>
+      <p class="subtitle">Ingresa tu correo para acceder al contenido</p>
 
-<!-- HERO -->
-<div class="hero">
-    <div class="hero-label">Ruta de aprendizaje</div>
-    <h1>Aprende SolidWorks con <span>Diego Gaona</span></h1>
-    <p>Módulos diseñados paso a paso para llevarte de cero hasta la certificación CSWA.</p>
+      <div class="msg error" id="errorMsg">
+        <i class="ti ti-alert-circle"></i>
+        <span id="errorText"></span>
+      </div>
+      <div class="msg success" id="successMsg">
+        <i class="ti ti-circle-check"></i>
+        <span>Acceso concedido. Redirigiendo...</span>
+      </div>
 
-    <!-- Stats rápidas: visibles siempre (logueado o no), no revelan precio -->
-    <div class="hero-stats">
-        <span class="hero-stat">232+ lecciones</span>
-        <span class="hero-stat">3 exámenes CSWA</span>
-        <span class="hero-stat">+200 planos PDF</span>
-        <span class="hero-stat">2 proyectos completos</span>
-        <span class="hero-stat">+19,000 alumnos</span>
+      <div class="field">
+        <label for="email">Correo electrónico</label>
+        <input type="text" id="email" placeholder="tucorreo@gmail.com"
+          autocomplete="new-password" autocorrect="off" autocapitalize="none" spellcheck="false" />
+      </div>
+
+      <button class="btn-login" id="btnLogin">
+        <div class="spinner" id="spinner"></div>
+        <span id="btnText">Entrar</span>
+      </button>
+
+      <hr class="divider" />
+      <p class="help">¿No tienes acceso? <a href="https://wa.me/524621579719?text=Hola%2C%20no%20puedo%20acceder%20al%20curso" target="_blank" rel="noopener" style="color:#185fa5; text-decoration: underline;">Contacta al administrador del curso</a>.</p>
     </div>
 
-    <div class="hero-oferta" id="hero-oferta">
-        <span class="oferta-badge">Acceso completo</span>
-        <div class="oferta-precio">
-            <span class="oferta-monto">$1799 MXN</span>
-            <span class="oferta-nota">pago único · acceso de por vida</span>
-        </div>
-        <ul class="oferta-lista">
-            <li>232+ lecciones en video y PDF: modelado 3D, planos técnicos y ensambles, de cero a avanzado</li>
-            <li>Simulador de examen CSWA: 3 exámenes, 36 preguntas en condición real</li>
-            <li>Bonus: +200 planos PDF de práctica + 2 proyectos completos (brazo robótico y bote de basura)</li>
-            <li>Acompañamiento por WhatsApp incluido en tu pago único, desde que empiezas hasta que terminas el curso</li>
-        </ul>
-        <a class="oferta-cta" href="https://wa.me/5214621579719?text=Hola%20Diego%2C%20quiero%20obtener%20el%20acceso%20completo%20a%20los%20cursos%20por%20%241799" target="_blank" rel="noopener">
-            💬 Quiero mi acceso →
-        </a>
+    <!-- ── VISTA 2: Código de verificación (enviado por correo) ── -->
+    <div id="viewCode" class="hidden">
+      <div class="logo">
+        <div class="logo-icon"><i class="ti ti-mail-opened"></i></div>
+        <span class="logo-text">Diego Gaona · Cursos</span>
+      </div>
+      <h1>Revisa tu correo</h1>
+      <p class="subtitle" id="codeSubtitle">Te enviamos un código de acceso.</p>
+      <p class="help" style="text-align: left; margin: -0.75rem 0 1rem;">¿No lo ves? Revisa también tu carpeta de spam o correo no deseado.</p>
+
+      <div class="msg error" id="codeErrorMsg">
+        <i class="ti ti-alert-circle"></i>
+        <span id="codeErrorText"></span>
+      </div>
+      <div class="msg info" id="codeInfoMsg">
+        <i class="ti ti-info-circle"></i>
+        <span id="codeInfoText">Código reenviado.</span>
+      </div>
+
+      <div class="field">
+        <label for="codeInput">Código de acceso</label>
+        <input type="text" id="codeInput" placeholder="579-352"
+          autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" maxlength="7" />
+      </div>
+
+      <button class="btn-login" id="btnVerificar">
+        <div class="spinner" id="spinnerVerificar"></div>
+        <span id="btnVerificarText">Verificar código</span>
+      </button>
+
+      <button class="btn-secondary" id="btnReenviar">Reenviar código</button>
+      <button class="btn-secondary" id="btnCambiarCorreo">‹ Usar otro correo</button>
     </div>
-</div>
 
-<script>
-    // Oculta la oferta ANTES del primer render si ya hay sesión activa (evita parpadeo)
-    (function () {
-        try {
-            const raw = localStorage.getItem('dg_sesion');
-            if (!raw || raw === 'Removido') return;
-            const datos = JSON.parse(raw);
-            if (!datos || datos.estado === 'removido') return;
-            if (datos.expira && Date.now() > Number(datos.expira)) return;
-            document.write('<style>#hero-oferta{display:none}</style>');
-        } catch (e) { /* si falla, se deja visible y el JS de abajo decide */ }
-    })();
-</script>
+  </div>
 
-<!-- RUTA -->
-<div class="ruta">
-    <div class="ruta-step"><div class="ruta-num">1</div> Modelado 3D</div>
-    <div class="ruta-arrow">→</div>
-    <div class="ruta-step"><div class="ruta-num">2</div> Planos 2D</div>
-    <div class="ruta-arrow">→</div>
-    <div class="ruta-step"><div class="ruta-num">3</div> Ensambles</div>
-    <div class="ruta-arrow">→</div>
-    <div class="ruta-step"><div class="ruta-num">4</div> Examen CSWA</div>
-</div>
+  <script>
+    // ================================================================
+    //  CONFIGURACIÓN GENERAL
+    // ================================================================
+    const WEBHOOK_URL   = 'https://script.google.com/macros/s/AKfycbxEbbDW-MwWJQSorzOfWovtWb4YPGWaLp2XTMFgNPCuMI1qoTQZVgWh_W14qOJ8QoK3_g/exec';
+    const REDIRECT_URL  = 'https://diegogaona117.github.io/curso-de-solidworks-modulo-pieza-diego-gaona/mis-cursos.html';
+    const GEO_URL        = 'https://get.geojs.io/v1/ip/geo.json';
+    const SESSION_KEY    = 'dg_sesion';
+    const SESSION_DAYS   = 30;
 
-<!-- GRID -->
-<div class="grid">
+    // Estados que SÍ dan acceso. Ajusta esta lista según los valores
+    // que use tu hoja/base de datos (por ejemplo: "completo", "prueba").
+    const ESTADOS_PERMITIDOS = ['completo', 'prueba'];
 
-    <!-- CARD 1 -->
-    <a class="card" href="https://diegogaona117.github.io/curso-de-solidworks-modulo-pieza-diego-gaona/">
-        <div class="card-img-wrap">
-            <img class="card-img" src="https://static.wixstatic.com/media/32c95b_b3183dd44b384957a103bc6d70991c48~mv2.webp" alt="Módulo de Pieza" loading="lazy">
-            <span class="card-badge badge-blue">Paso 1</span>
-        </div>
-        <div class="card-body">
-            <div class="card-num">MÓDULO 1</div>
-            <div class="card-title">Domina el Modelado 3D desde Cero</div>
-            <div class="card-desc">Empiezas aquí, desde cero. Sé que la pantalla de SolidWorks puede intimidar al inicio — le pasa a casi todos mis alumnos. Por eso vamos paso a paso, con ejercicios reales y planos técnicos, hasta que diseñar una pieza deje de sentirse complicado.</div>
-            <div class="card-features">
-                <span class="feat">126 lecciones</span>
-                <span class="feat">17 prácticas</span>
-                <span class="feat">Planos PDF</span>
-            </div>
-        </div>
-        <div class="card-footer">
-            <button class="btn-card btn-primary">Entrar →</button>
-        </div>
-    </a>
+    // ================================================================
+    //  REFERENCIAS AL HTML
+    // ================================================================
+    const viewLogin   = document.getElementById('viewLogin');
+    const viewCode    = document.getElementById('viewCode');
 
-    <!-- CARD 2 -->
-    <a class="card" href="https://diegogaona117.github.io/curso-de-solidworks-modulo-pieza-diego-gaona/planos-2d.html">
-        <div class="card-img-wrap">
-            <img class="card-img" src="https://static.wixstatic.com/media/32c95b_d9041b1606a148ce99f60096c4c40597~mv2.webp" alt="Planos 2D" loading="lazy">
-            <span class="card-badge badge-blue">Paso 2</span>
-        </div>
-        <div class="card-body">
-            <div class="card-num">MÓDULO 2</div>
-            <div class="card-title">Crea Planos Técnicos Profesionales</div>
-            <div class="card-desc">Esta parte suele sentirse más técnica, y está bien si al principio no le encuentras el chiste. Pero es justo lo que separa a alguien que "sabe modelar" de alguien que puede entregar un trabajo real. Aquí aprendes a comunicar tus diseños como se hace en la industria.</div>
-            <div class="card-features">
-                <span class="feat">26 lecciones</span>
-                <span class="feat">Plantillas 2D</span>
-                <span class="feat">Exportar PDF</span>
-            </div>
-        </div>
-        <div class="card-footer">
-            <button class="btn-card btn-primary">Entrar →</button>
-        </div>
-    </a>
+    const btnLogin    = document.getElementById('btnLogin');
+    const emailEl     = document.getElementById('email');
+    const errorMsg    = document.getElementById('errorMsg');
+    const errorText   = document.getElementById('errorText');
+    const successMsg  = document.getElementById('successMsg');
+    const spinner     = document.getElementById('spinner');
+    const btnText     = document.getElementById('btnText');
 
-    <!-- CARD 3 -->
-    <a class="card" href="https://diegogaona117.github.io/curso-de-solidworks-modulo-pieza-diego-gaona/modulo-ensamble.html">
-        <div class="card-img-wrap">
-            <img class="card-img" src="https://static.wixstatic.com/media/32c95b_6e8b28671a22438d83ee7dc289bbd44e~mv2.webp" alt="Ensamble" loading="lazy">
-            <span class="card-badge badge-blue">Paso 3</span>
-        </div>
-        <div class="card-body">
-            <div class="card-num">MÓDULO 3</div>
-            <div class="card-title">Experto en Ensambles y Mecanismos</div>
-            <div class="card-desc">Ya no trabajas una pieza sola — ahora las haces funcionar juntas. Esta etapa es donde más alumnos se traban, porque hay más piezas moviéndose a la vez. Vamos a resolverlo con calma: uniones, movimiento real, mecanismos completos.</div>
-            <div class="card-features">
-                <span class="feat">39 lecciones</span>
-                <span class="feat">Animaciones</span>
-                <span class="feat">Mecanismos</span>
-            </div>
-        </div>
-        <div class="card-footer">
-            <button class="btn-card btn-primary">Entrar →</button>
-        </div>
-    </a>
+    const codeSubtitle    = document.getElementById('codeSubtitle');
+    const codeInput       = document.getElementById('codeInput');
+    const codeErrorMsg    = document.getElementById('codeErrorMsg');
+    const codeErrorText   = document.getElementById('codeErrorText');
+    const codeInfoMsg     = document.getElementById('codeInfoMsg');
+    const codeInfoText    = document.getElementById('codeInfoText');
+    const btnVerificar    = document.getElementById('btnVerificar');
+    const spinnerVerificar= document.getElementById('spinnerVerificar');
+    const btnVerificarText= document.getElementById('btnVerificarText');
+    const btnReenviar     = document.getElementById('btnReenviar');
+    const btnCambiarCorreo= document.getElementById('btnCambiarCorreo');
 
-</div>
+    // Se guarda en memoria (NO en localStorage) mientras se completa
+    // el paso 2 — todavía no hay sesión confirmada.
+    let pendiente = { email: '', geo: null };
 
-<!-- CARD 4 — destacada, meta final del camino -->
-<div class="grid" style="padding-top:0;">
-    <a class="card card-meta" href="https://diegogaona117.github.io/curso-de-solidworks-modulo-pieza-diego-gaona/simuladores-cswa.html">
-        <div class="card-img-wrap">
-            <img class="card-img" src="https://static.wixstatic.com/media/32c95b_8912d1c812b54b9798b69fe6ac7bf1ae~mv2.webp" alt="Simulador CSWA" loading="lazy">
-            <span class="card-badge badge-orange">Paso 4</span>
-        </div>
-        <div class="card-body">
-            <div class="card-num">MÓDULO 4 · META FINAL</div>
-            <div class="card-title">Simulador del Examen CSWA</div>
-            <div class="card-desc">Llegaste hasta aquí — ahora toca comprobar que puedes con el examen real. Sé lo que se siente pagar la certificación y no saber si vas a pasar. Por eso practicamos en condiciones idénticas a las del examen oficial, para que llegues con la confianza de ya haberlo hecho antes.</div>
-            <div class="card-features">
-                <span class="feat">3 exámenes</span>
-                <span class="feat">36 preguntas</span>
-                <span class="feat">Condición real</span>
-            </div>
-        </div>
-        <div class="card-footer">
-            <button class="btn-card btn-orange">Entrar →</button>
-        </div>
-    </a>
-</div>
+    // Texto original del botón "Reenviar código", para restaurarlo
+    // cuando termina el cooldown.
+    const TEXTO_REENVIAR_DEFAULT = btnReenviar.textContent;
 
-<!-- SECCIÓN BONUS -->
-<div class="section-label">🎁 Bonus exclusivo</div>
-<div class="grid grid-bonus">
+    // Referencia al intervalo de cuenta regresiva activo (si hay uno).
+    let cooldownInterval = null;
 
-    <!-- CARD BONUS -->
-    <a class="card card-bonus" href="https://drive.google.com/drive/u/0/folders/1LvlZVqsaqf-SNq8X1Drep8vGL9gv0kZO" target="_blank" rel="noopener">
-        <div class="card-img-wrap">
-            <img class="card-img" src="https://static.wixstatic.com/media/32c95b_331ce35ed17b40189995fd96455f06da~mv2.png" alt="Paquete de planos PDF para practicar" loading="lazy">
-            <span class="card-badge badge-gold">Regalo</span>
-        </div>
-        <div class="card-body">
-            <div class="card-num">BONUS</div>
-            <div class="card-title">Paquete de +200 Planos PDF para Practicar</div>
-            <div class="card-desc">Después de cada módulo, la práctica es lo que realmente fija el aprendizaje. Te dejo más de 200 planos en PDF, desde nivel cero hasta ensambles avanzados, para que sigas ejercitando por tu cuenta lo que ya aprendiste conmigo.</div>
-            <div class="card-features">
-                <span class="feat">+200 planos PDF</span>
-                <span class="feat">Nivel cero → avanzado</span>
-                <span class="feat">Incluye ensambles</span>
-            </div>
-        </div>
-        <div class="card-footer">
-            <button class="btn-card btn-gold">Descargar →</button>
-        </div>
-    </a>
+    // ================================================================
+    //  VERIFICAR SESIÓN AL CARGAR
+    // ================================================================
+    window.addEventListener('load', () => {
+      emailEl.value = '';
 
-    <!-- CARD BONUS 2 — Proyecto Brazo Robótico -->
-    <a class="card card-bonus" href="https://diegogaona117.github.io/curso-de-solidworks-modulo-pieza-diego-gaona/Brazo_Robotico">
-        <div class="card-img-wrap">
-            <img class="card-img" src="https://static.wixstatic.com/media/32c95b_30b47a359cda412baed1ecc460830f23~mv2.webp" alt="Proyecto Brazo Robótico" loading="lazy">
-            <span class="card-badge badge-gold">Proyecto extra</span>
-        </div>
-        <div class="card-body">
-            <div class="card-num">BONUS</div>
-            <div class="card-title">Diseña un Brazo Robótico Completo</div>
-            <div class="card-desc">Cuando ya tienes los 4 módulos encima, lo que más fija el aprendizaje es un proyecto real de principio a fin. Aquí armamos juntos un brazo robótico completo, pieza por pieza, hasta verlo funcionar como un mecanismo articulado.</div>
-            <div class="card-features">
-                <span class="feat">Proyecto completo</span>
-                <span class="feat">16 lecciones</span>
-                <span class="feat">Mecanismo articulado</span>
-            </div>
-        </div>
-        <div class="card-footer">
-            <button class="btn-card btn-gold">Comenzar proyecto →</button>
-        </div>
-    </a>
+      // Bloqueo agresivo de autofill
+      emailEl.setAttribute('readonly', true);
+      setTimeout(() => {
+        emailEl.removeAttribute('readonly');
+        emailEl.value = '';
+      }, 300);
 
-    <!-- CARD BONUS 3 — Proyecto Bote de Basura -->
-<a class="card card-bonus" href="https://diegogaona117.github.io/curso-de-solidworks-modulo-pieza-diego-gaona/Bote_basura.html">
-    <div class="card-img-wrap">
-        <img class="card-img" src="https://static.wixstatic.com/media/32c95b_05f48db8f4cc42bfba08eb24ed5f55e6~mv2.webp" alt="Proyecto Bote de Basura" loading="lazy">
-        <span class="card-badge badge-gold">Proyecto extra</span>
-    </div>
-    <div class="card-body">
-        <div class="card-num">BONUS</div>
-        <div class="card-title">Diseña y Ensambla un Bote de Basura</div>
-        <div class="card-desc">Este proyecto te lleva del inicio al final: primero modelas cada pieza por separado, y después las ensamblas hasta tener el mecanismo completo funcionando — la tapa, el pedal, todo moviéndose como en la vida real. Es la mejor forma de ver cómo se conecta todo lo que ya aprendiste.</div>
-        <div class="card-features">
-            <span class="feat">Proyecto completo</span>
-            <span class="feat">6 lecciones</span>
-            <span class="feat">Mecanismo funcional</span>
-        </div>
-    </div>
-    <div class="card-footer">
-        <button class="btn-card btn-gold">Comenzar proyecto →</button>
-    </div>
-</a>
-
-    <!-- CARD BONUS 4 — Introducción a visualize -->
-<a class="card card-bonus" href="https://diegogaona117.github.io/curso-de-solidworks-modulo-pieza-diego-gaona/Visualize.html"> <!-- No olvides actualizar este enlace -->
-    <div class="card-img-wrap">
-        <!-- Reemplaza el src con una imagen de un render finalizado -->
-        <img class="card-img" src="https://static.wixstatic.com/media/32c95b_bd80573c4ddf496681b11ca56d24bb5c~mv2.webp" alt="Introducción a Visualize" loading="lazy">
-        <span class="card-badge badge-gold">Lección extra</span>
-    </div>
-    <div class="card-body">
-        <div class="card-num">BONUS</div>
-        <div class="card-title">Introducción a Visualize</div>
-        <div class="card-desc">Aprende a transformar tus modelos 3D en imágenes impactantes. En este módulo extra, descubriremos cómo aplicar materiales, configurar la iluminación y ajustar las cámaras para crear renders fotorrealistas que resalten la calidad de tus diseños.</div>
-        <div class="card-features">
-            <span class="feat">Renders fotorrealistas</span>
-            <span class="feat">Materiales realistas</span>
-            <span class="feat">Luces y cámaras</span>
-        </div>
-    </div>
-    <div class="card-footer">
-        <button class="btn-card btn-gold">Comenzar lección →</button>
-    </div>
-</a>
-
-    <!-- CARD BONUS 5 — Introducción a FreeCad -->
-<a class="card card-bonus" href="https://diegogaona117.github.io/curso-de-solidworks-modulo-pieza-diego-gaona/freecad.html"> <!-- No olvides actualizar este enlace -->
-    <div class="card-img-wrap">
-        <!-- Reemplaza el src con una imagen representativa de una pieza hecha en FreeCad -->
-        <img class="card-img" src="https://static.wixstatic.com/media/32c95b_1d8948a5a4734730b485a1485f8a7ea7~mv2.webp" alt="Introducción a FreeCad" loading="lazy">
-        <span class="card-badge badge-gold">Mini curso</span>
-    </div>
-    <div class="card-body">
-        <div class="card-num">BONUS</div>
-        <div class="card-title">Introducción a FreeCad</div>
-        <div class="card-desc">Da tus primeros pasos en FreeCad, el software de diseño 3D de código abierto. En este mini curso de 13 clases aprenderás desde cero a modelar piezas simples, dominando las herramientas básicas de croquis y operaciones.</div>
-        <div class="card-features">
-            <span class="feat">13 clases</span>
-            <span class="feat">Desde cero</span>
-            <span class="feat">Software gratuito</span>
-        </div>
-    </div>
-    <div class="card-footer">
-        <button class="btn-card btn-gold">Comenzar lección →</button>
-    </div>
-</a>
-
-</div>
-
-<footer>
-    <p>¿Necesitas ayuda? Escríbeme por <a href="https://wa.me/5214621579719" target="_blank">WhatsApp</a> · Diego Gaona © 2026</p>
-</footer>
-
-<script>
-    /* ═══════════════ SESIÓN (dg_sesion) ═══════════════ */
-    const LOGIN_URL   = "https://diegogaona117.github.io/login";
-    const SESION_KEY  = "dg_sesion";
-    const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbxEbbDW-MwWJQSorzOfWovtWb4YPGWaLp2XTMFgNPCuMI1qoTQZVgWh_W14qOJ8QoK3_g/exec";
-    const REVALIDAR_CADA_MS = 5 * 60 * 1000; // cada 5 minutos
-
-    function leerSesion() {
-        const raw = localStorage.getItem(SESION_KEY);
-        if (!raw || raw === "Removido") return null;
-
-        try {
-            const datos = JSON.parse(raw);
-            if (!datos || datos.estado === "removido") return null;
-            if (datos.expira && Date.now() > Number(datos.expira)) return null;
-            return datos;
-        } catch (e) {
-            return null;
-        }
-    }
-
-    function actualizarBotonSesion() {
-        const sesion = leerSesion();
-        const btn = document.getElementById('btn-sesion');
-        const texto = document.getElementById('btn-sesion-texto');
-        const oferta = document.getElementById('hero-oferta');
-
-        if (sesion) {
-            btn.classList.add('activa');
-            texto.textContent = '🔓 Cerrar sesión';
-            if (oferta) oferta.style.display = 'none';
-        } else {
-            btn.classList.remove('activa');
-            texto.textContent = '🔒 Iniciar sesión';
-            if (oferta) oferta.style.display = 'block';
-        }
-    }
-
-    function clicBotonSesion() {
-        if (leerSesion()) {
-            cerrarSesion();
-        } else {
-            iniciarSesion();
-        }
-    }
-
-    function cerrarSesion() {
-        localStorage.setItem(SESION_KEY, "Removido");
-        window.location.href = LOGIN_URL;
-    }
-
-    function iniciarSesion() {
-        window.location.href = LOGIN_URL;
-    }
-
-    // ─────────────────────────────────────────────────────────
-    //  Revalida contra el servidor que el "codigo" de esta sesión
-    //  sigue siendo el activo (nadie más inició sesión con este
-    //  correo después). Si ya no coincide, cierra sesión aquí
-    //  mismo aunque el localStorage local siga "vigente".
-    // ─────────────────────────────────────────────────────────
-    async function revalidarSesionServidor() {
-    const sesion = leerSesion();
-    if (!sesion || !sesion.email) return; // no hay sesión, nada que validar
-
-    if (!sesion.codigo) {
-        // Sesión de antes del sistema de código de seguridad:
-        // ya no es válida por definición, se cierra.
-        cerrarSesion();
-        return;
-    }
-
-    try {
-        const url = WEBHOOK_URL
-            + '?action=checkEstado'
-            + '&email='  + encodeURIComponent(sesion.email)
-            + '&codigo=' + encodeURIComponent(sesion.codigo);
-
-        const res  = await fetch(url);
-        const data = await res.json();
-        const estado = (data.estado || '').toString().trim().toLowerCase();
-
-        const sigueValida = data.ok && data.sesionValida && estado !== 'removido';
-        if (!sigueValida) cerrarSesion();
-    } catch (e) {
-        console.error('No se pudo revalidar la sesión:', e);
-    }
-}
-    document.addEventListener('DOMContentLoaded', () => {
-        actualizarBotonSesion();
-        revalidarSesionServidor();                          // al cargar la página
-        setInterval(revalidarSesionServidor, REVALIDAR_CADA_MS); // y cada 5 minutos mientras esté abierta
+      verificarSesionExistente();
     });
 
-    /* ═══════════════ DESCARGA ACCESO DIRECTO ═══════════════ */
-function descargarAcceso() {
-    const html = `<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="3;url=https://diegogaona117.github.io/curso-de-solidworks-modulo-pieza-diego-gaona/mis-cursos.html">
-    <title>Mis Cursos — Diego Gaona</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background: #0b0d12;
-            color: #e8eaf0;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+    async function verificarSesionExistente() {
+      const sesionRaw = localStorage.getItem(SESSION_KEY);
+      if (!sesionRaw) return;
+
+      let sesion;
+      try {
+        sesion = JSON.parse(sesionRaw);
+      } catch {
+        localStorage.removeItem(SESSION_KEY);
+        return;
+      }
+
+      const { email, codigo, expira } = sesion;
+
+      if (!expira || Date.now() >= expira || !email) {
+        localStorage.removeItem(SESSION_KEY);
+        return;
+      }
+
+      if (codigo) {
+        setLoading(true);
+        btnText.textContent = 'Verificando sesión...';
+
+        try {
+          const url = WEBHOOK_URL
+            + '?action=checkEstado'
+            + '&email=' + encodeURIComponent(email)
+            + '&codigo=' + encodeURIComponent(codigo);
+
+          const res  = await fetch(url);
+          const data = await res.json();
+          const estado = (data.estado || '').toString().trim().toLowerCase();
+
+          if (data.ok && ESTADOS_PERMITIDOS.includes(estado) && data.sesionValida) {
+            redirigirSesionValida();
+          } else {
+            localStorage.removeItem(SESSION_KEY);
+            setLoading(false);
+            if (data.bloqueado) {
+              showError('Demasiados intentos. Inicia sesión de nuevo con tu correo.');
+            } else if (data.ok && !data.sesionValida) {
+              showError('Tu sesión se abrió en otro dispositivo. Inicia sesión de nuevo.');
+            }
+          }
+        } catch (e) {
+          console.error(e);
+          redirigirSesionValida(); // sin conexión: no bloqueamos, deja pasar con la sesión local
         }
-        .card {
-            text-align: center;
-            padding: 48px 40px;
-            background: #12151c;
-            border: 1px solid #ffffff15;
-            border-radius: 20px;
-            max-width: 380px;
-            width: 90%;
-        }
-        .logo { font-size: 22px; font-weight: 700; margin-bottom: 24px; letter-spacing: -0.03em; }
-        .logo span { color: #f97316; }
-        .spinner {
-            width: 40px; height: 40px;
-            border: 3px solid #ffffff15;
-            border-top-color: #3b82f6;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin: 0 auto 24px;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        p { font-size: 14px; color: #9ca3af; line-height: 1.6; margin-bottom: 20px; }
-        a { font-size: 13px; color: #3b82f6; text-decoration: none; }
-        a:hover { text-decoration: underline; }
-    </style>
-</head>
-<body>
-    <div class="card">
-        <div class="logo">Diego <span>Gaona</span></div>
-        <div class="spinner"></div>
-        <p>Redirigiendo a tus cursos en 3 segundos...</p>
-        <a href="https://diegogaona117.github.io/curso-de-solidworks-modulo-pieza-diego-gaona/mis-cursos.html">
-            Clic aquí si no redirige automáticamente
-        </a>
-    </div>
-</body>
-</html>`;
+        return;
+      }
 
-    const blob = new Blob([html], { type: 'text/html' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = 'Mis cursos - Diego Gaona.html';
-    link.click();
-    URL.revokeObjectURL(link.href);
-
-    // Mostrar tooltip
-    document.getElementById('tip-descarga').style.display = 'block';
-}
-
-function cerrarTip() {
-    document.getElementById('tip-descarga').style.display = 'none';
-}
-
-// Cerrar tooltip si hacen clic fuera
-document.addEventListener('click', function(e) {
-    const tip = document.getElementById('tip-descarga');
-    const btn = document.querySelector('.btn-acceso');
-    if (tip && !tip.contains(e.target) && e.target !== btn) {
-        tip.style.display = 'none';
+      // Sesión vieja sin "codigo" (de antes del sistema de código de
+      // seguridad): ya no es válida por definición, se limpia y se
+      // deja la pantalla de login para que inicie de nuevo.
+      localStorage.removeItem(SESSION_KEY);
     }
-});
-</script>
+
+    function redirigirSesionValida() {
+      successMsg.classList.add('show');
+      btnLogin.disabled   = true;
+      btnText.textContent = 'Sesión activa...';
+      setTimeout(() => { window.location.href = REDIRECT_URL; }, 600);
+    }
+
+    // ================================================================
+    //  MENSAJES Y ESTADO DE BOTONES
+    // ================================================================
+    function showError(msg) {
+      errorText.textContent = msg;
+      errorMsg.classList.add('show');
+      successMsg.classList.remove('show');
+    }
+    function hideMessages() {
+      errorMsg.classList.remove('show');
+      successMsg.classList.remove('show');
+    }
+    function setLoading(loading) {
+      btnLogin.disabled     = loading;
+      spinner.style.display = loading ? 'block' : 'none';
+      btnText.textContent   = loading ? 'Verificando...' : 'Entrar';
+    }
+
+    function showCodeError(msg) {
+      codeErrorText.textContent = msg;
+      codeErrorMsg.classList.add('show');
+      codeInfoMsg.classList.remove('show');
+    }
+    function showCodeInfo(msg) {
+      codeInfoText.textContent = msg;
+      codeInfoMsg.classList.add('show');
+      codeErrorMsg.classList.remove('show');
+    }
+    function hideCodeMessages() {
+      codeErrorMsg.classList.remove('show');
+      codeInfoMsg.classList.remove('show');
+    }
+    function setLoadingVerificar(loading) {
+      btnVerificar.disabled      = loading;
+      btnCambiarCorreo.disabled  = loading;
+      // btnReenviar no se toca aquí: su estado lo controla el cooldown
+      // (ver iniciarCooldownReenviar / detenerCooldownReenviar).
+      spinnerVerificar.style.display = loading ? 'block' : 'none';
+      btnVerificarText.textContent   = loading ? 'Verificando...' : 'Verificar código';
+    }
+
+    // ================================================================
+    //  COOLDOWN de "Reenviar código" — el backend es quien decide
+    //  cuánto falta (esperaSegundos); aquí solo lo mostramos.
+    // ================================================================
+    function iniciarCooldownReenviar(segundosIniciales) {
+      if (cooldownInterval) clearInterval(cooldownInterval);
+
+      let restante = Math.max(0, Math.round(segundosIniciales));
+      btnReenviar.disabled = true;
+
+      const actualizarTexto = () => {
+        if (restante <= 0) {
+          detenerCooldownReenviar();
+          return;
+        }
+        btnReenviar.textContent = 'Reenviar código (' + restante + 's)';
+        restante--;
+      };
+
+      actualizarTexto();
+      cooldownInterval = setInterval(actualizarTexto, 1000);
+    }
+
+    function detenerCooldownReenviar() {
+      if (cooldownInterval) {
+        clearInterval(cooldownInterval);
+        cooldownInterval = null;
+      }
+      btnReenviar.disabled    = false;
+      btnReenviar.textContent = TEXTO_REENVIAR_DEFAULT;
+    }
+
+    // ================================================================
+    //  UBICACIÓN APROXIMADA POR IP (no pide permiso al usuario)
+    // ================================================================
+    async function obtenerUbicacion() {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 2500);
+      try {
+        const res = await fetch(GEO_URL, { signal: controller.signal });
+        const data = await res.json();
+        clearTimeout(timeout);
+        return {
+          ciudad: data.city || '', region: data.region || '',
+          pais: data.country || '', ip: data.ip || ''
+        };
+      } catch (e) {
+        clearTimeout(timeout);
+        return { ciudad: '', region: '', pais: '', ip: '' };
+      }
+    }
+
+    // ================================================================
+    //  PASO 1 — pedir correo, el backend genera y envía el código
+    // ================================================================
+    async function handleLogin() {
+      hideMessages();
+
+      const email = emailEl.value.trim().toLowerCase();
+      if (!email) { showError('Ingresa tu correo electrónico.'); emailEl.focus(); return; }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        showError('Ingresa un correo electrónico válido.');
+        emailEl.focus();
+        return;
+      }
+
+      setLoading(true);
+
+      try {
+        const geo = await obtenerUbicacion();
+
+        const url = WEBHOOK_URL
+          + '?action=login'
+          + '&email=' + encodeURIComponent(email);
+
+        const response = await fetch(url, { method: 'GET', redirect: 'follow' });
+        const text     = await response.text();
+        let data;
+        try { data = JSON.parse(text); }
+        catch { throw new Error('Respuesta inesperada del servidor.'); }
+
+        const estado = (data.estado || '').toString().trim().toLowerCase();
+
+        if (data.ok && ESTADOS_PERMITIDOS.includes(estado)) {
+          pendiente.email = email;
+          pendiente.geo   = geo;
+          mostrarVistaCodigo(email);
+          // Si el usuario vuelve a este paso más tarde y pide otro
+          // código antes de tiempo, ya se arranca el cooldown ahí.
+        } else if (data.cooldown) {
+          showError(data.mensaje || 'Ya tienes un código pendiente. Espera unos minutos.');
+          emailEl.focus();
+        } else {
+          showError(data.mensaje || 'Correo no encontrado o sin acceso activo.');
+          emailEl.focus();
+        }
+      } catch (err) {
+        showError('No se pudo conectar con el servidor. Intenta de nuevo.');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    function mostrarVistaCodigo(email) {
+      codeSubtitle.textContent = 'Enviamos un código de acceso a ' + email + '.';
+      hideCodeMessages();
+      codeInput.value = '';
+      viewLogin.classList.add('hidden');
+      viewCode.classList.remove('hidden');
+      codeInput.focus();
+    }
+
+    function volverAlLogin() {
+      pendiente = { email: '', geo: null };
+      detenerCooldownReenviar();
+      hideCodeMessages();
+      viewCode.classList.add('hidden');
+      viewLogin.classList.remove('hidden');
+      hideMessages();
+      emailEl.focus();
+    }
+
+    // ================================================================
+    //  PASO 2 — confirmar el código recibido por correo
+    // ================================================================
+    async function handleVerificarCodigo() {
+      hideCodeMessages();
+
+      const codigo = codeInput.value.trim();
+      if (!codigo) { showCodeError('Ingresa el código que recibiste.'); codeInput.focus(); return; }
+      if (!pendiente.email) { volverAlLogin(); return; }
+
+      setLoadingVerificar(true);
+
+      try {
+        const geo = pendiente.geo || { ciudad: '', region: '', pais: '', ip: '' };
+
+        const url = WEBHOOK_URL
+          + '?action=verificarCodigo'
+          + '&email='  + encodeURIComponent(pendiente.email)
+          + '&codigo=' + encodeURIComponent(codigo)
+          + '&ciudad=' + encodeURIComponent(geo.ciudad)
+          + '&region=' + encodeURIComponent(geo.region)
+          + '&pais='   + encodeURIComponent(geo.pais)
+          + '&ip='     + encodeURIComponent(geo.ip);
+
+        const response = await fetch(url, { method: 'GET', redirect: 'follow' });
+        const text     = await response.text();
+        let data;
+        try { data = JSON.parse(text); }
+        catch { throw new Error('Respuesta inesperada del servidor.'); }
+
+        const estado = (data.estado || '').toString().trim().toLowerCase();
+
+        if (data.ok && ESTADOS_PERMITIDOS.includes(estado)) {
+          const expira = Date.now() + SESSION_DAYS * 24 * 60 * 60 * 1000;
+          localStorage.setItem(SESSION_KEY, JSON.stringify({
+            email: pendiente.email,
+            estado,
+            codigo: data.codigo || codigo,
+            expira
+          }));
+          detenerCooldownReenviar();
+          showCodeInfo('Acceso concedido. Redirigiendo...');
+          setTimeout(() => { window.location.href = REDIRECT_URL; }, 700);
+        } else {
+          showCodeError(data.mensaje || 'Código incorrecto o expirado.');
+          codeInput.focus();
+        }
+      } catch (err) {
+        showCodeError('No se pudo conectar con el servidor. Intenta de nuevo.');
+        console.error(err);
+      } finally {
+        setLoadingVerificar(false);
+      }
+    }
+
+    // ================================================================
+    //  REENVIAR CÓDIGO (repite el paso 1 con el mismo correo)
+    // ================================================================
+    async function handleReenviar() {
+      if (!pendiente.email) { volverAlLogin(); return; }
+      hideCodeMessages();
+      setLoadingVerificar(true);
+      try {
+        const url = WEBHOOK_URL + '?action=login&email=' + encodeURIComponent(pendiente.email);
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.ok) {
+          showCodeInfo('Te enviamos un nuevo código.');
+          // Arranca el cooldown preventivamente con el mismo valor
+          // que usa el backend, para que no se pueda volver a pedir
+          // antes de tiempo.
+          iniciarCooldownReenviar(5 * 60);
+        } else if (data.cooldown) {
+          showCodeError(data.mensaje || 'Espera unos minutos antes de pedir otro código.');
+          iniciarCooldownReenviar(data.esperaSegundos || 60);
+        } else {
+          showCodeError(data.mensaje || 'No se pudo reenviar el código.');
+        }
+      } catch (err) {
+        showCodeError('No se pudo conectar con el servidor.');
+        console.error(err);
+      } finally {
+        setLoadingVerificar(false);
+      }
+    }
+
+    // ================================================================
+    //  EVENTOS
+    // ================================================================
+    btnLogin.addEventListener('click', handleLogin);
+    emailEl.addEventListener('keydown', e => { if (e.key === 'Enter') handleLogin(); });
+
+    // Formatea automáticamente a "579-352": deja solo dígitos y guión,
+    // y coloca el guión después del tercer dígito, sin importar si el
+    // usuario escribe manualmente o pega el código completo.
+    function formatearCodigo(valor) {
+      const soloDigitos = valor.replace(/[^0-9]/g, '').slice(0, 6);
+      if (soloDigitos.length <= 3) return soloDigitos;
+      return soloDigitos.slice(0, 3) + '-' + soloDigitos.slice(3);
+    }
+
+    codeInput.addEventListener('input', () => {
+      const cursorAlFinal = codeInput.selectionEnd === codeInput.value.length;
+      codeInput.value = formatearCodigo(codeInput.value);
+      if (cursorAlFinal) {
+        codeInput.setSelectionRange(codeInput.value.length, codeInput.value.length);
+      }
+    });
+
+    btnVerificar.addEventListener('click', handleVerificarCodigo);
+    codeInput.addEventListener('keydown', e => { if (e.key === 'Enter') handleVerificarCodigo(); });
+
+    btnReenviar.addEventListener('click', handleReenviar);
+    btnCambiarCorreo.addEventListener('click', volverAlLogin);
+  </script>
 
 </body>
 </html>
