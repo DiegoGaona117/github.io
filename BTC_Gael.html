@@ -106,6 +106,22 @@
   @keyframes pulse { 50% { opacity: .35; } }
   @media (prefers-reduced-motion: reduce) { .dot.live { animation: none; } }
 
+  body.locked > header, body.locked > main, body.locked > nav { display: none; }
+  .lock { display: none; flex: 1; flex-direction: column; justify-content: center; gap: 14px; padding: 32px 24px calc(32px + env(safe-area-inset-bottom, 0px)); }
+  body.locked .lock { display: flex; }
+  .lock h2 { font-size: 22px; font-weight: 700; }
+  .lock p { font-size: 14px; color: var(--muted); line-height: 1.5; }
+  .words { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 4px; }
+  @media (max-width: 380px) { .words { grid-template-columns: repeat(2, 1fr); } }
+  .w { position: relative; }
+  .w span { position: absolute; left: 9px; top: 50%; transform: translateY(-50%); font-size: 10px; color: var(--muted); pointer-events: none; font-variant-numeric: tabular-nums; }
+  .w input { width: 100%; background: var(--card); border: 1px solid var(--line); border-radius: 10px; color: var(--text); font-size: 16px; padding: 12px 6px 12px 27px; outline: none; }
+  .w input:focus { border-color: var(--blue); }
+  .lock form { margin-top: 4px; }
+  .lock button { background: var(--blue); border: 0; border-radius: 12px; color: #fff; font-size: 16px; font-weight: 600; padding: 14px; }
+  .lock button:disabled { opacity: .6; }
+  .lock .err { color: var(--down); font-size: 13px; min-height: 18px; }
+
   .skeleton { display: inline-block; width: 90px; height: 14px; border-radius: 6px; background: var(--line); vertical-align: middle; }
 
   nav { display: grid; grid-template-columns: repeat(4, 1fr); background: var(--card); border-top: 1px solid var(--line); padding: 8px 0 calc(8px + env(safe-area-inset-bottom, 0px)); }
@@ -114,11 +130,21 @@
   nav svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 </style>
 </head>
-<body>
+<body class="locked">
+
+<section class="lock" id="lock">
+  <h2>Ingresa a tu cartera</h2>
+  <p>Escribe las 12 palabras de tu frase de acceso, una en cada casilla. También puedes pegarlas todas juntas en cualquier casilla.</p>
+  <form id="lockForm" autocomplete="off">
+    <div class="words" id="words"></div>
+    <div class="err" id="lockErr" role="alert"></div>
+    <button type="submit" id="lockBtn">Entrar</button>
+  </form>
+</section>
 
 <header>
   <div class="wallet-name"><div class="avatar"></div>Cartera principal</div>
-  <button class="icon-btn" aria-label="Ajustes">
+  <button class="icon-btn" id="logoutBtn" aria-label="Cerrar sesión" title="Cerrar sesión">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg>
   </button>
 </header>
@@ -361,8 +387,6 @@
       if (!candles.length) chartEl.innerHTML = '<div class="chart-empty">No se pudieron cargar las velas</div>';
     }
   }
-  updateChart();
-  setInterval(updateChart, CHART_REFRESH_MS);
 
   // ---- Datos de tu hoja (Google Sheets) ----
   function render() {
@@ -414,13 +438,118 @@
       }
     }
   }
-  loadSheet();
-  setInterval(loadSheet, 60000);
+  // ---- Acceso con frase de 12 palabras ----
+  // Solo se guarda un hash (PBKDF2) de la frase, nunca las palabras.
+  const PHRASE_HASH = "8fd3228895b4d7015cf17d1e717798f9a46f6633af2c093414f5ccd5ebbc436a";
+  const PHRASE_SALT = "wallet-gael-v1";
+  const PHRASE_ITER = 200000;
+  const KEY = "wallet_access";
 
-  connectWS();
-  update();
-  setInterval(update, REFRESH_MS);
-  document.addEventListener("visibilitychange", () => { if (!document.hidden) { connectWS(); update(); } });
+  async function hashPhrase(text) {
+    const norm = text.toLowerCase().trim().split(/\s+/).join(" ");
+    const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(norm), "PBKDF2", false, ["deriveBits"]);
+    const bits = await crypto.subtle.deriveBits(
+      { name: "PBKDF2", salt: new TextEncoder().encode(PHRASE_SALT), iterations: PHRASE_ITER, hash: "SHA-256" }, key, 256);
+    return [...new Uint8Array(bits)].map((b) => b.toString(16).padStart(2, "0")).join("");
+  }
+
+  let started = false;
+  function startApp() {
+    if (started) return;
+    started = true;
+    document.body.classList.remove("locked");
+    updateChart();
+    setInterval(updateChart, CHART_REFRESH_MS);
+    loadSheet();
+    setInterval(loadSheet, 60000);
+    connectWS();
+    update();
+    setInterval(update, REFRESH_MS);
+    document.addEventListener("visibilitychange", () => { if (!document.hidden) { connectWS(); update(); } });
+  }
+
+  // Doce casillas, una por palabra (texto visible)
+  const wordInputs = [];
+  for (let i = 0; i < 12; i++) {
+    const w = document.createElement("div");
+    w.className = "w";
+    w.innerHTML = "<span>" + (i + 1) + "</span>";
+    const inp = document.createElement("input");
+    inp.type = "text";
+    inp.autocomplete = "off";
+    inp.autocapitalize = "none";
+    inp.spellcheck = false;
+    inp.setAttribute("autocorrect", "off");
+    inp.setAttribute("aria-label", "Palabra " + (i + 1));
+    inp.enterKeyHint = i < 11 ? "next" : "done";
+    w.appendChild(inp);
+    $("words").appendChild(w);
+    wordInputs.push(inp);
+  }
+
+  // Reparte varias palabras desde la casilla `start`
+  function fillFrom(start, words) {
+    words.forEach((word, k) => { if (start + k < 12) wordInputs[start + k].value = word; });
+    wordInputs[Math.min(start + words.length, 11)].focus();
+  }
+
+  wordInputs.forEach((inp, i) => {
+    inp.addEventListener("paste", (e) => {
+      const text = (e.clipboardData || window.clipboardData).getData("text");
+      const words = text.toLowerCase().trim().split(/\s+/).filter(Boolean);
+      if (words.length > 1) { e.preventDefault(); fillFrom(i, words); }
+    });
+    inp.addEventListener("input", () => {
+      // Escribir un espacio pasa a la siguiente casilla
+      if (/\s/.test(inp.value)) {
+        const words = inp.value.toLowerCase().trim().split(/\s+/).filter(Boolean);
+        inp.value = "";
+        if (words.length) fillFrom(i, words);
+      }
+    });
+    inp.addEventListener("keydown", (e) => {
+      if (e.key === "Backspace" && !inp.value && i > 0) { e.preventDefault(); wordInputs[i - 1].focus(); }
+      else if (e.key === "Enter" && i < 11) { e.preventDefault(); wordInputs[i + 1].focus(); }
+    });
+  });
+  if (document.body.classList.contains("locked")) wordInputs[0].focus();
+
+  let fails = 0, blockedUntil = 0;
+  $("lockForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const err = $("lockErr"), btn = $("lockBtn");
+    const wait = Math.ceil((blockedUntil - Date.now()) / 1000);
+    if (wait > 0) { err.textContent = "Demasiados intentos. Espera " + wait + " s."; return; }
+    const words = wordInputs.map((x) => x.value.trim().toLowerCase());
+    const missing = words.map((w, i) => (w ? 0 : i + 1)).filter(Boolean);
+    if (missing.length) { err.textContent = "Falta la palabra " + missing[0] + (missing.length > 1 ? " y " + (missing.length - 1) + " más." : "."); wordInputs[missing[0] - 1].focus(); return; }
+    btn.disabled = true; err.textContent = "";
+    try {
+      const h = await hashPhrase(words.join(" "));
+      if (h === PHRASE_HASH) {
+        try { localStorage.setItem(KEY, h); } catch (_) {}
+        wordInputs.forEach((x) => { x.value = ""; });
+        startApp();
+      } else {
+        fails++;
+        if (fails >= 5) { blockedUntil = Date.now() + 30000; fails = 0; err.textContent = "Frase incorrecta. Espera 30 s para reintentar."; }
+        else err.textContent = "Frase incorrecta. Revisa que cada palabra esté en su casilla.";
+      }
+    } catch (_) {
+      err.textContent = "Tu navegador no permite verificar la frase aquí (se necesita https).";
+    }
+    btn.disabled = false;
+  });
+
+  $("logoutBtn").addEventListener("click", () => {
+    try { localStorage.removeItem(KEY); } catch (_) {}
+    location.reload();
+  });
+
+  // Si ya ingresó la frase antes en este dispositivo, entra directo
+  let saved = null;
+  try { saved = localStorage.getItem(KEY); } catch (_) {}
+  if (saved === PHRASE_HASH) startApp();
 </script>
 </body>
 </html>
