@@ -89,6 +89,15 @@
   .pl b { display: block; color: var(--text); font-size: 13px; font-weight: 600; margin-top: 3px; font-variant-numeric: tabular-nums; }
   .pl b.up { color: var(--up); } .pl b.down { color: var(--down); }
 
+  .history { background: var(--card); border-radius: 16px; padding: 14px; margin-top: 12px; }
+  .history h2 { font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 4px; }
+  .buy { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 0; border-top: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+  .buy:first-of-type { border-top: 0; }
+  .buy b { display: block; font-size: 14px; font-weight: 600; }
+  .buy span { font-size: 12px; color: var(--muted); }
+  .buy .r { text-align: right; }
+  .history-empty { font-size: 13px; color: var(--muted); padding: 10px 0 2px; }
+
   .status { display: flex; align-items: center; justify-content: center; gap: 8px; color: var(--muted); font-size: 12px; margin-top: 18px; }
   .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); }
   .dot.live { background: var(--up); animation: pulse 2s infinite; }
@@ -158,6 +167,11 @@
       <span class="axis hi" id="hi"></span><span class="axis lo" id="lo"></span>
     </div>
     <div class="ohlc" id="ohlc"></div>
+  </section>
+
+  <section class="history">
+    <h2>Historial de compras</h2>
+    <div id="buys"><div class="history-empty">Cargando compras…</div></div>
   </section>
 
   <div class="status"><i class="dot" id="dot"></i><span id="statusText">Conectando…</span></div>
@@ -346,6 +360,16 @@
     g.className = gain > 0 ? "up" : gain < 0 ? "down" : "";
   }
 
+  function renderHistory(list) {
+    const box = $("buys");
+    if (!list.length) { box.innerHTML = '<div class="history-empty">Aún no hay compras en la hoja.</div>'; return; }
+    box.innerHTML = list.map((b, i) => {
+      const btc = Number((b.compra / b.precio).toFixed(8));
+      return '<div class="buy"><div><b>' + fmt.format(b.compra) + '</b><span>' + btc + ' BTC</span></div>' +
+             '<div class="r"><b>' + fmt.format(b.precio) + '</b><span>Compra #' + (i + 1) + '</span></div></div>';
+    }).reverse().join(""); // la más reciente arriba
+  }
+
   async function loadSheet() {
     try {
       const r = await fetch(SHEET_URL);
@@ -355,6 +379,7 @@
       const prevAvg = hold.promedio;
       hold = { btc: +d.btc || 0, invertido: +d.totalInvertido || 0, promedio: +d.promedio || 0 };
       render();
+      renderHistory(Array.isArray(d.historial) ? d.historial : []);
       if (candles.length && hold.promedio !== prevAvg) drawChart(); // redibuja solo si cambió el promedio
       $("sheetStatus").textContent = "Hoja sincronizada · " + (d.compras || 0) + " compras";
     } catch (e) {
