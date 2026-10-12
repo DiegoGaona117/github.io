@@ -40,6 +40,7 @@
   .balance { text-align: center; padding: 36px 0 28px; }
   .balance small { color: var(--muted); font-size: 14px; }
   .balance h1 { font-size: 44px; font-weight: 700; letter-spacing: -1px; margin-top: 6px; }
+  .balance h1 { min-height: 54px; }
   .balance h1 span { font-size: 18px; color: var(--muted); font-weight: 500; letter-spacing: 0; margin-left: 4px; }
 
   .actions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 28px; }
@@ -125,7 +126,7 @@
 <main>
   <section class="balance">
     <small>Saldo total</small>
-    <h1 id="total">$0.00<span>MXN</span></h1>
+    <h1 id="total"><span>Cargando…</span></h1>
   </section>
 
   <section class="actions">
@@ -149,15 +150,15 @@
       <div class="sub"><span id="price"><span class="skeleton"></span></span><span id="chg" class="chg"></span></div>
     </div>
     <div class="amount">
-      <b id="amountBtc">0 BTC</b>
-      <span id="amountMxn">$0.00</span>
+      <b id="amountBtc">Cargando…</b>
+      <span id="amountMxn">&nbsp;</span>
     </div>
   </article>
 
   <section class="pl">
-    <div>Invertido<b id="plInv">$0.00</b></div>
-    <div>Precio promedio<b id="plAvg">$0.00</b></div>
-    <div>Ganancia / pérdida<b id="plGain">$0.00</b></div>
+    <div>Invertido<b id="plInv">Cargando…</b></div>
+    <div>Precio promedio<b id="plAvg">Cargando…</b></div>
+    <div>Ganancia / pérdida<b id="plGain">Cargando…</b></div>
   </section>
 
   <section class="chart-card">
@@ -189,6 +190,7 @@
   const SHEET_URL = "https://script.google.com/macros/s/AKfycbx9vSg43xWH6VWad7OovopE1Ojdbu2htphcUXWPR6aCbvXMG-QGO1sgBGo4R7ziCbimMw/exec";
   let hold = { btc: 0, invertido: 0, promedio: 0 }; // datos de tu hoja Gael BTC
   let lastPrice = 0;
+  let sheetReady = false; // true cuando ya llegaron los datos de la hoja
   const REFRESH_MS = 15000;
 
   const fmt = new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN" });
@@ -364,18 +366,16 @@
 
   // ---- Datos de tu hoja (Google Sheets) ----
   function render() {
-    // Lo que no depende del precio en vivo se muestra de inmediato
-    $("plInv").textContent = fmt.format(hold.invertido);
-    $("plAvg").textContent = fmt.format(hold.promedio);
-    $("amountBtc").textContent = Number(hold.btc.toFixed(8)) + " BTC";
-
-    // Lo que depende del precio espera a tenerlo (evita el parpadeo de -100%)
-    if (!lastPrice) return;
+    // Muestra todo junto: espera a tener la hoja y el precio en vivo
+    if (!sheetReady || !lastPrice) return;
     const value = hold.btc * lastPrice;
     const gain = value - hold.invertido;
     const pct = hold.invertido > 0 ? (gain / hold.invertido) * 100 : 0;
     $("total").innerHTML = fmt.format(value) + "<span>MXN</span>";
+    $("amountBtc").textContent = Number(hold.btc.toFixed(8)) + " BTC";
     $("amountMxn").textContent = fmt.format(value);
+    $("plInv").textContent = fmt.format(hold.invertido);
+    $("plAvg").textContent = fmt.format(hold.promedio);
     const g = $("plGain");
     g.textContent = (gain >= 0 ? "+" : "") + fmt.format(gain) + " (" + pct.toFixed(2) + "%)";
     g.className = gain > 0 ? "up" : gain < 0 ? "down" : "";
@@ -399,12 +399,19 @@
       if (d.error) throw new Error(d.error);
       const prevAvg = hold.promedio;
       hold = { btc: +d.btc || 0, invertido: +d.totalInvertido || 0, promedio: +d.promedio || 0 };
+      sheetReady = true;
       render();
       renderHistory(Array.isArray(d.historial) ? d.historial : []);
       if (candles.length && hold.promedio !== prevAvg) drawChart(); // redibuja solo si cambió el promedio
       $("sheetStatus").textContent = "Hoja sincronizada · " + (d.compras || 0) + " compras";
     } catch (e) {
       $("sheetStatus").textContent = "No se pudo leer la hoja: " + e.message;
+      if (!sheetReady) {
+        $("total").innerHTML = "<span>Sin datos</span>";
+        $("amountBtc").textContent = "—";
+        ["plInv", "plAvg", "plGain"].forEach((id) => { $(id).textContent = "—"; });
+        $("buys").innerHTML = '<div class="history-empty">No se pudo cargar el historial.</div>';
+      }
     }
   }
   loadSheet();
