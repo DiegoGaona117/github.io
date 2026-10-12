@@ -116,6 +116,7 @@
   .w { position: relative; }
   .w span { position: absolute; left: 9px; top: 50%; transform: translateY(-50%); font-size: 10px; color: var(--muted); pointer-events: none; font-variant-numeric: tabular-nums; }
   .w input { width: 100%; background: var(--card); border: 1px solid var(--line); border-radius: 10px; color: var(--text); font-size: 16px; padding: 12px 6px 12px 27px; outline: none; }
+  .w input { text-transform: lowercase; }
   .w input:focus { border-color: var(--blue); }
   .lock form { margin-top: 4px; }
   .lock button { background: var(--blue); border: 0; border-radius: 12px; color: #fff; font-size: 16px; font-weight: 600; padding: 14px; }
@@ -477,7 +478,7 @@
     const inp = document.createElement("input");
     inp.type = "text";
     inp.autocomplete = "off";
-    inp.autocapitalize = "none";
+    inp.autocapitalize = "off";
     inp.spellcheck = false;
     inp.setAttribute("autocorrect", "off");
     inp.setAttribute("aria-label", "Palabra " + (i + 1));
@@ -500,6 +501,13 @@
       if (words.length > 1) { e.preventDefault(); fillFrom(i, words); }
     });
     inp.addEventListener("input", () => {
+      // Siempre minúsculas (los teclados del celular suelen poner la primera en mayúscula)
+      const lower = inp.value.toLowerCase();
+      if (inp.value !== lower) {
+        const pos = inp.selectionStart;
+        inp.value = lower;
+        try { inp.setSelectionRange(pos, pos); } catch (_) {}
+      }
       // Escribir un espacio pasa a la siguiente casilla
       if (/\s/.test(inp.value)) {
         const words = inp.value.toLowerCase().trim().split(/\s+/).filter(Boolean);
