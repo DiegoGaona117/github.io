@@ -212,21 +212,42 @@
     }
   }
 
+  // Pinta el precio y recalcula saldo y ganancia
+  function applyPrice(price, change) {
+    $("price").textContent = fmt.format(price);
+    const up = change >= 0;
+    const chg = $("chg");
+    chg.textContent = (up ? "+" : "") + change.toFixed(2) + "%";
+    chg.className = "chg " + (up ? "up" : "down");
+    lastPrice = price;
+    render();
+    $("dot").className = "dot live";
+    $("statusText").textContent = "Precio en vivo · " + new Date().toLocaleTimeString("es-MX");
+  }
+
+  // Tiempo real: WebSocket de Binance (envía el precio cada ~1 s, sin pedirlo)
+  let ws = null, wsTimer = null, wsRetry = 0, lastTick = 0;
+  function connectWS() {
+    if (ws && (ws.readyState === WebSocket.CONNECTING || ws.readyState === WebSocket.OPEN)) return;
+    clearTimeout(wsTimer);
+    ws = new WebSocket("wss://stream.binance.com:9443/ws/btcmxn@ticker");
+    ws.onopen = () => { wsRetry = 0; };
+    ws.onmessage = (ev) => {
+      const d = JSON.parse(ev.data);
+      if (!d.c) return;
+      lastTick = Date.now();
+      applyPrice(parseFloat(d.c), parseFloat(d.P));
+    };
+    ws.onerror = () => ws.close();
+    ws.onclose = () => { wsTimer = setTimeout(connectWS, Math.min(30000, 1000 * 2 ** wsRetry++)); };
+  }
+
+  // Respaldo: si el WebSocket no está entregando datos, consulta por HTTP cada 15 s
   async function update() {
+    if (Date.now() - lastTick < 5000) return; // el WebSocket está activo
     try {
       const { price, change } = await getPrice();
-      $("price").textContent = fmt.format(price);
-
-      const up = change >= 0;
-      const chg = $("chg");
-      chg.textContent = (up ? "+" : "") + change.toFixed(2) + "%";
-      chg.className = "chg " + (up ? "up" : "down");
-
-      lastPrice = price;
-      render();
-
-      $("dot").className = "dot live";
-      $("statusText").textContent = "Precio en vivo · " + new Date().toLocaleTimeString("es-MX");
+      applyPrice(price, change);
     } catch (e) {
       $("dot").className = "dot err";
       $("statusText").textContent = "Sin conexión. Reintentando…";
@@ -389,9 +410,10 @@
   loadSheet();
   setInterval(loadSheet, 60000);
 
+  connectWS();
   update();
   setInterval(update, REFRESH_MS);
-  document.addEventListener("visibilitychange", () => { if (!document.hidden) update(); });
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) { connectWS(); update(); } });
 </script>
 </body>
 </html>
