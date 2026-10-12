@@ -16,6 +16,7 @@
     --up: #2ecc8f;
     --down: #ff5b6e;
     --btc: #f7931a;
+    --avg: #f7c948;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   html, body { height: 100%; background: var(--bg); }
@@ -55,7 +56,6 @@
 
   .asset { display: flex; align-items: center; gap: 14px; padding: 14px 0; }
   .coin { width: 42px; height: 42px; border-radius: 50%; background: var(--btc); display: grid; place-items: center; flex: none; }
-  .coin svg { width: 24px; height: 24px; fill: #fff; }
   .info { flex: 1; min-width: 0; }
   .info b { display: block; font-size: 16px; }
   .info .sub { display: flex; gap: 8px; align-items: center; font-size: 13px; color: var(--muted); margin-top: 3px; flex-wrap: wrap; }
@@ -65,16 +65,16 @@
   .amount b { display: block; font-size: 16px; }
   .amount span { font-size: 13px; color: var(--muted); }
 
-
   .chart-card { background: var(--card); border-radius: 16px; padding: 14px 14px 10px; margin-top: 4px; }
   .chart-head { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); margin-bottom: 8px; min-height: 18px; }
   .chart-head #tip { color: var(--text); font-variant-numeric: tabular-nums; }
   .chart { position: relative; height: 200px; touch-action: pan-y; }
   .chart svg { width: 100%; height: 100%; display: block; }
-  .chart .ln { fill: none; stroke: currentColor; stroke-width: 2; vector-effect: non-scaling-stroke; stroke-linejoin: round; }
   .chart .cursor { stroke: var(--muted); stroke-width: 1; vector-effect: non-scaling-stroke; }
   .chart-empty { position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); font-size: 13px; }
 
+  .chart .avg { stroke: var(--avg); stroke-width: 1.2; stroke-dasharray: 5 4; vector-effect: non-scaling-stroke; }
+  .avg-label { position: absolute; left: 4px; font-size: 10px; color: var(--avg); pointer-events: none; font-variant-numeric: tabular-nums; text-shadow: 0 0 4px var(--card), 0 0 4px var(--card); }
 
   .chart-wrap { position: relative; }
   .axis { position: absolute; right: 2px; font-size: 10px; color: var(--muted); pointer-events: none; text-shadow: 0 0 4px var(--card), 0 0 4px var(--card); font-variant-numeric: tabular-nums; }
@@ -84,7 +84,6 @@
   .chart .wick { stroke-width: 1.2; vector-effect: non-scaling-stroke; }
   .ohlc { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 10px; font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
   .ohlc b { display: block; color: var(--text); font-size: 12px; font-weight: 600; margin-top: 2px; }
-
 
   .pl { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; background: var(--card); border-radius: 16px; padding: 14px; margin: 4px 0 12px; font-size: 11px; color: var(--muted); }
   .pl b { display: block; color: var(--text); font-size: 13px; font-weight: 600; margin-top: 3px; font-variant-numeric: tabular-nums; }
@@ -179,21 +178,23 @@
   const REFRESH_MS = 15000;
 
   const fmt = new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN" });
+  const fmt0 = new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN", maximumFractionDigits: 0 });
   const $ = (id) => document.getElementById(id);
 
+  // ---- Precio en vivo ----
   async function getPrice() {
-    // Principal: CoinGecko
     try {
-      const r = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=mxn&include_24hr_change=true");
-      if (!r.ok) throw new Error(r.status);
-      const d = await r.json();
-      return { price: d.bitcoin.mxn, change: d.bitcoin.mxn_24h_change };
-    } catch (e) {
-      // Respaldo: Binance (par BTC/MXN)
+      // Principal: Binance (par BTC/MXN)
       const r = await fetch("https://api.binance.com/api/v3/ticker/24hr?symbol=BTCMXN");
       if (!r.ok) throw new Error(r.status);
       const d = await r.json();
       return { price: parseFloat(d.lastPrice), change: parseFloat(d.priceChangePercent) };
+    } catch (e) {
+      // Respaldo: CoinGecko
+      const r = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=mxn&include_24hr_change=true");
+      if (!r.ok) throw new Error(r.status);
+      const d = await r.json();
+      return { price: d.bitcoin.mxn, change: d.bitcoin.mxn_24h_change };
     }
   }
 
@@ -218,10 +219,8 @@
     }
   }
 
-
   // ---- Velas 1D ----
   const CHART_REFRESH_MS = 300000; // 5 min
-  const fmt0 = new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN", maximumFractionDigits: 0 });
   let candles = [];
 
   async function getCandles() {
@@ -262,8 +261,10 @@
     const n = candles.length;
     if (n < 2) return;
     const W = 400, H = 200, pad = 6;
-    const min = Math.min(...candles.map((k) => k.l));
-    const max = Math.max(...candles.map((k) => k.h));
+    const avg = hold.promedio > 0 ? hold.promedio : 0;
+    let min = Math.min(...candles.map((k) => k.l));
+    let max = Math.max(...candles.map((k) => k.h));
+    if (avg) { min = Math.min(min, avg); max = Math.max(max, avg); } // que la línea siempre quepa
     const span = max - min || 1;
     const Y = (p) => H - pad - ((p - min) / span) * (H - pad * 2);
     const slot = W / n, bw = slot * 0.68;
@@ -276,9 +277,20 @@
       out += '<line class="wick ' + cls + '" x1="' + cx.toFixed(1) + '" x2="' + cx.toFixed(1) + '" y1="' + Y(k.h).toFixed(1) + '" y2="' + Y(k.l).toFixed(1) + '"/>' +
              '<rect class="' + cls + '" x="' + (cx - bw / 2).toFixed(1) + '" y="' + top.toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + h.toFixed(1) + '" stroke-width="0"/>';
     });
+
+    // Línea del precio promedio de compra
+    let label = "";
+    if (avg) {
+      const y = Y(avg);
+      out += '<line class="avg" x1="0" x2="' + W + '" y1="' + y.toFixed(1) + '" y2="' + y.toFixed(1) + '"/>';
+      const pct = (y / H) * 100;
+      const pos = pct < 12 ? "top:calc(" + pct.toFixed(1) + "% + 3px)" : "top:calc(" + pct.toFixed(1) + "% - 14px)";
+      label = '<span class="avg-label" style="' + pos + '">Promedio ' + fmt0.format(avg) + '</span>';
+    }
+
     $("chart").innerHTML =
       '<svg viewBox="0 0 ' + W + " " + H + '" preserveAspectRatio="none">' + out +
-      '<line class="cursor" id="cursor" x1="0" x2="0" y1="0" y2="' + H + '" style="display:none"/></svg>';
+      '<line class="cursor" id="cursor" x1="0" x2="0" y1="0" y2="' + H + '" style="display:none"/></svg>' + label;
     $("hi").textContent = fmt0.format(max);
     $("lo").textContent = fmt0.format(min);
     setOHLC(n - 1);
@@ -317,14 +329,18 @@
 
   // ---- Datos de tu hoja (Google Sheets) ----
   function render() {
+    // Lo que no depende del precio en vivo se muestra de inmediato
+    $("plInv").textContent = fmt.format(hold.invertido);
+    $("plAvg").textContent = fmt.format(hold.promedio);
+    $("amountBtc").textContent = Number(hold.btc.toFixed(8)) + " BTC";
+
+    // Lo que depende del precio espera a tenerlo (evita el parpadeo de -100%)
+    if (!lastPrice) return;
     const value = hold.btc * lastPrice;
     const gain = value - hold.invertido;
     const pct = hold.invertido > 0 ? (gain / hold.invertido) * 100 : 0;
     $("total").innerHTML = fmt.format(value) + "<span>MXN</span>";
-    $("amountBtc").textContent = Number(hold.btc.toFixed(8)) + " BTC";
     $("amountMxn").textContent = fmt.format(value);
-    $("plInv").textContent = fmt.format(hold.invertido);
-    $("plAvg").textContent = fmt.format(hold.promedio);
     const g = $("plGain");
     g.textContent = (gain >= 0 ? "+" : "") + fmt.format(gain) + " (" + pct.toFixed(2) + "%)";
     g.className = gain > 0 ? "up" : gain < 0 ? "down" : "";
@@ -336,11 +352,13 @@
       if (!r.ok) throw new Error(r.status);
       const d = await r.json();
       if (d.error) throw new Error(d.error);
+      const prevAvg = hold.promedio;
       hold = { btc: +d.btc || 0, invertido: +d.totalInvertido || 0, promedio: +d.promedio || 0 };
       render();
+      if (candles.length && hold.promedio !== prevAvg) drawChart(); // redibuja solo si cambió el promedio
       $("sheetStatus").textContent = "Hoja sincronizada · " + (d.compras || 0) + " compras";
     } catch (e) {
-      $("sheetStatus").textContent = "No se pudo leer la hoja (revisa la implementación)";
+      $("sheetStatus").textContent = "No se pudo leer la hoja: " + e.message;
     }
   }
   loadSheet();
